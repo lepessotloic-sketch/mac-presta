@@ -144,3 +144,5 @@ header::after { content: ''; position: absolute; inset: auto 0 -1px 0; height: 2
 .choix li:hover, .choix li.focus { background: linear-gradient(90deg, rgba(245, 164, 23, .26), rgba(245, 164, 23, .07)); }
 .choix li[aria-selected="true"] { color: var(--green-2); font-weight: 600; }
 .choix li[aria-selected="true"]::after { content: '✓'; }
+/* le message « Demande envoyée » se centre dans la carte au lieu de laisser un grand vide dessous */
+.contact-form { display: flex; flex-direction: column; justify-content: center; }
