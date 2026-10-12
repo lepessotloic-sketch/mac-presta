@@ -123,3 +123,24 @@ header::after { content: ''; position: absolute; inset: auto 0 -1px 0; height: 2
 .cd-photo img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 38%; }
 .cd-photo figcaption { position: absolute; inset: auto 0 0 0; padding: 34px 16px 12px; background: linear-gradient(180deg, transparent, rgba(8, 8, 9, .85)); color: #fff; font-weight: 600; font-size: .9rem; }
 @media (max-width: 980px) { .cd-photo { flex-basis: 300px; min-height: 300px; } }
+
+/* Listes déroulantes sur mesure (2026-10-12) : plus de bleu du navigateur, la liste reprend les couleurs du site */
+.choix { position: relative; }
+.choix select { position: absolute; opacity: 0; pointer-events: none; width: 1px; height: 1px; padding: 0; border: 0; }
+.contact-form .choix-btn {
+  display: flex; justify-content: space-between; align-items: center; gap: 10px; width: 100%; margin: 0; text-align: left;
+  background: #101113; border: 1px solid var(--line); border-radius: 14px; padding: 13px 14px; color: var(--text); font: inherit; font-weight: 400; cursor: pointer;
+}
+.choix-btn::after { content: ''; flex: none; width: 8px; height: 8px; border-right: 2px solid var(--green-2); border-bottom: 2px solid var(--green-2); transform: rotate(45deg) translateY(-3px); transition: transform .25s ease; }
+.choix.ouvert .choix-btn, .contact-form .choix-btn:focus-visible { outline: none; border-color: rgba(255, 201, 90, .55); }
+.choix.ouvert .choix-btn::after { transform: rotate(-135deg) translateY(-1px); }
+.choix ul {
+  list-style: none; margin: 6px 0 0; padding: 6px; position: absolute; left: 0; right: 0; top: 100%; z-index: 20;
+  background: #17181B; border: 1px solid rgba(255, 201, 90, .4); border-radius: 14px; box-shadow: 0 22px 44px -14px rgba(0, 0, 0, .8);
+  opacity: 0; visibility: hidden; transform: translateY(-6px); transition: opacity .2s ease, transform .2s ease, visibility 0s .2s;
+}
+.choix.ouvert ul { opacity: 1; visibility: visible; transform: none; transition: opacity .2s ease, transform .2s ease; }
+.choix li { display: flex; justify-content: space-between; align-items: center; gap: 10px; padding: 11px 12px; border-radius: 10px; color: var(--text); cursor: pointer; }
+.choix li:hover, .choix li.focus { background: linear-gradient(90deg, rgba(245, 164, 23, .26), rgba(245, 164, 23, .07)); }
+.choix li[aria-selected="true"] { color: var(--green-2); font-weight: 600; }
+.choix li[aria-selected="true"]::after { content: '✓'; }

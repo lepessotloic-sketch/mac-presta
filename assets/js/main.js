@@ -27,6 +27,29 @@ document.addEventListener('DOMContentLoaded', () => {
     q.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); bascule(); } });
   });
 
+  // Listes déroulantes aux couleurs du site (le <select> reste dessous : c'est lui qui porte la valeur)
+  document.querySelectorAll('#demande-form select').forEach(sel => {
+    const box = document.createElement('div'); box.className = 'choix'; sel.parentNode.insertBefore(box, sel); box.appendChild(sel);
+    const btn = document.createElement('button'); btn.type = 'button'; btn.className = 'choix-btn'; btn.setAttribute('aria-haspopup', 'listbox'); btn.setAttribute('aria-expanded', 'false');
+    const lab = document.querySelector('label[for="' + sel.id + '"]'); if (lab) { btn.id = sel.id + '-btn'; btn.setAttribute('aria-label', lab.textContent); lab.addEventListener('click', e => { e.preventDefault(); btn.focus(); }); }
+    const ul = document.createElement('ul'); ul.setAttribute('role', 'listbox'); sel.tabIndex = -1;
+    const opts = [...sel.options]; let f = sel.selectedIndex;
+    const marque = () => [...ul.children].forEach((li, i) => { li.classList.toggle('focus', i === f); li.setAttribute('aria-selected', i === sel.selectedIndex); });
+    const choisir = (i, muet) => { sel.selectedIndex = i; btn.textContent = opts[i].text; if (!muet) sel.dispatchEvent(new Event('change', { bubbles: true })); marque(); };
+    const ouvrir = () => { box.classList.add('ouvert'); btn.setAttribute('aria-expanded', 'true'); f = sel.selectedIndex; marque(); };
+    const fermer = () => { box.classList.remove('ouvert'); btn.setAttribute('aria-expanded', 'false'); };
+    opts.forEach((o, i) => { const li = document.createElement('li'); li.setAttribute('role', 'option'); li.textContent = o.text; li.addEventListener('click', () => { choisir(i); fermer(); btn.focus(); }); li.addEventListener('mouseenter', () => { f = i; marque(); }); ul.appendChild(li); });
+    box.append(btn, ul);
+    btn.addEventListener('click', () => box.classList.contains('ouvert') ? fermer() : ouvrir());
+    btn.addEventListener('keydown', e => { const o = box.classList.contains('ouvert');
+      if (e.key === 'ArrowDown' || e.key === 'ArrowUp') { e.preventDefault(); if (!o) return ouvrir(); f = (f + (e.key === 'ArrowDown' ? 1 : -1) + opts.length) % opts.length; marque(); }
+      else if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); if (o) { choisir(f); fermer(); } else ouvrir(); }
+      else if (e.key === 'Escape') fermer(); });
+    document.addEventListener('click', e => { if (!box.contains(e.target)) fermer(); });
+    sel.form.addEventListener('reset', () => setTimeout(() => choisir(sel.selectedIndex, true)));
+    choisir(sel.selectedIndex, true);
+  });
+
   // Demande de date
   const form = $('#demande-form');
   const demain = new Date(); demain.setDate(demain.getDate() + 1);
