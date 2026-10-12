@@ -146,3 +146,4 @@ header::after { content: ''; position: absolute; inset: auto 0 -1px 0; height: 2
 .choix li[aria-selected="true"]::after { content: '✓'; }
 /* le message « Demande envoyée » se centre dans la carte au lieu de laisser un grand vide dessous */
 .contact-form { display: flex; flex-direction: column; justify-content: center; }
+.contact-form label small { font-size: inherit; opacity: .75; font-weight: 400; }

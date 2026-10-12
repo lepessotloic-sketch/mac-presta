@@ -59,7 +59,7 @@ document.addEventListener('DOMContentLoaded', () => {
   function maj() {
     const m = [];
     if (!v('#r-date') || v('#r-date') < min) m.push('une date à venir'); if (!v('#r-heure')) m.push("l'heure");
-    if (!v('#r-adresse')) m.push("l'adresse du chantier"); if (!v('#r-societe')) m.push('la société'); if (!v('#r-resp')) m.push('le responsable');
+    if (!v('#r-adresse')) m.push("l'adresse du chantier"); if (!v('#r-societe')) m.push('la société');
     if (!/\d{6,}/.test(v('#r-tel').replace(/\D/g, ''))) m.push('le téléphone'); if (!/^\S+@\S+\.\S+$/.test(v('#r-mail'))) m.push("l'e-mail");
     $('#envoyer').disabled = m.length > 0;
     $('#aide').className = 'form-status' + (m.length ? '' : ' success');
@@ -71,7 +71,7 @@ document.addEventListener('DOMContentLoaded', () => {
   form.addEventListener('submit', async e => {
     e.preventDefault(); if (bouton.disabled) return;
     const donnees = { date: v('#r-date'), heure: v('#r-heure'), prestation: texte('#r-presta'), creneau: texte('#r-creneau'), adresse: v('#r-adresse'), distance: texte('#r-dist'),
-      societe: v('#r-societe'), responsable: v('#r-resp'), telephone: v('#r-tel'), email: v('#r-mail'), remarques: v('#r-desc'), site_web: $('#r-site').value, t: Date.now() - debut };
+      societe: v('#r-societe'), responsable: v('#r-resp') || 'Non précisé', telephone: v('#r-tel'), email: v('#r-mail'), remarques: v('#r-desc'), site_web: $('#r-site').value, t: Date.now() - debut };
     bouton.disabled = true; bouton.textContent = 'Envoi en cours…'; $('#aide').className = 'form-status loading'; $('#aide').textContent = '';
     const arret = new AbortController(), minuteur = setTimeout(() => arret.abort(), 15000);
     let reussi = false;
